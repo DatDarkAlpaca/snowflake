@@ -7,6 +7,26 @@
 *.o
 *.obj
 
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Binaries
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Ii]ntermediate/
+[Ii]ntermediates/
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+
 # Precompiled Headers
 *.gch
 *.pch
