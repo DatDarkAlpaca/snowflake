@@ -1,6 +1,13 @@
 #pragma once
 #include <numeric>
 
+// Debug:
+#ifdef _DEBUG
+	#if !defined(SNOW_DEBUG)
+		#define SNOW_DEBUG
+	#endif
+#endif
+
 // Definitions:
 using U8  = std::uint8_t;
 using U16 = std::uint16_t;
