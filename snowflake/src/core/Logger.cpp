@@ -3,7 +3,7 @@
 
 void snow::initializeLogger()
 {
-#if defined(_DEBUG)
+#if defined(SNOW_DEBUG)
 	spdlog::set_level(spdlog::level::trace);
 #endif
 }

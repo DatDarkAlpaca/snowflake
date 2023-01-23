@@ -7,7 +7,7 @@ namespace snow
 	SNOW_API void initializeLogger();
 }
 
-#if defined(_DEBUG) || defined(NDEBUG)
+#ifdef SNOW_DEBUG
 	#define SNOW_LOG_WARN(...)		::spdlog::warn(__VA_ARGS__)
 	#define SNOW_LOG_ERROR(...)		::spdlog::error(__VA_ARGS__)
 	#define SNOW_LOG_CRITICAL(...)	::spdlog::critical(__VA_ARGS__)
@@ -17,7 +17,7 @@ namespace snow
 	#define SNOW_LOG_CRITICAL(...)
 #endif
 
-#if defined(_DEBUG)
+#ifdef SNOW_DEBUG
 	#define SNOW_LOG_DEBUG(...)		::spdlog::debug(__VA_ARGS__)
 	#define SNOW_LOG_TRACE(...)		::spdlog::trace(__VA_ARGS__)
 	#define SNOW_LOG_INFO(...)		::spdlog::info(__VA_ARGS__)

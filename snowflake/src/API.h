@@ -2,7 +2,7 @@
 #include <numeric>
 
 // Debug:
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(NDEBUG)
 	#if !defined(SNOW_DEBUG)
 		#define SNOW_DEBUG
 	#endif
