@@ -2,6 +2,7 @@
 #include "SnowflakeApp.h"
 
 #include "Logger.h"
+#include "platform/vulkan/VulkanInstance.h"
 
 namespace snow
 {
@@ -23,13 +24,15 @@ namespace snow
 
 namespace snow
 {
-	SnowflakeApp::SnowflakeApp(int width, int height, const char* title)
+	SnowflakeApp::SnowflakeApp(int width, int height, const char* title, const char* applicationName)
 	{
 		initializeLogger();
 
 		initializeGLFW();
 
 		m_Window = new SnowWindow(width, height, title);
+
+		m_VulkanInstance = vulkan::createInstance(applicationName, "Snowflake Engine");
 	}
 
 	SnowflakeApp::~SnowflakeApp()
