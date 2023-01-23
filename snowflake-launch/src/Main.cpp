@@ -2,5 +2,6 @@
 
 int main()
 {
-	snow::initializeLogger();
+	snow::SnowflakeApp app(800, 600, "Snowflake Window");
+	app.run();
 }
