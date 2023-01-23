@@ -2,7 +2,11 @@
 #include "SnowflakeApp.h"
 
 #include "Logger.h"
+
+// Todo: implement an abstraction
 #include "platform/vulkan/VulkanInstance.h"
+#include "platform/vulkan/VulkanMessenger.h"
+#include "platform/vulkan/VulkanDevice.h"
 
 namespace snow
 {
@@ -33,6 +37,13 @@ namespace snow
 		m_Window = new SnowWindow(width, height, title);
 
 		m_VulkanInstance = vulkan::createInstance(applicationName, "Snowflake Engine");
+
+#ifdef SNOW_DEBUG
+		m_Dispatcher = vk::DispatchLoaderDynamic(m_VulkanInstance, vkGetInstanceProcAddr);
+		m_DebugMessenger = vulkan::createDebugMessenger(m_VulkanInstance, m_Dispatcher);
+#endif
+
+		m_PhysicalDevice = vulkan::selectPhysicalDevice(m_VulkanInstance);
 	}
 
 	SnowflakeApp::~SnowflakeApp()

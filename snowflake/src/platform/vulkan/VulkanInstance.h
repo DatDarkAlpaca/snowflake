@@ -145,13 +145,13 @@ namespace snow::vulkan
 
 		// Layers:
 		std::vector<const char*> layers;
+
+#ifdef SNOW_DEBUG
 		layers.push_back("VK_LAYER_KHRONOS_validation");
+#endif
 
 		// Supported:
-		if (!areExtensionSupported(extensions))
-			return nullptr;
-
-		if (!areLayersSupported(layers))
+		if (!areExtensionSupported(extensions) || !areLayersSupported(layers))
 			return nullptr;
 
 		// Create Info:

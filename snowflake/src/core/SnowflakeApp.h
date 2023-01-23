@@ -19,6 +19,11 @@ namespace snow
     private:
         vk::Instance m_VulkanInstance;
 
+        vk::DebugUtilsMessengerEXT m_DebugMessenger = nullptr;
+        vk::DispatchLoaderDynamic m_Dispatcher;
+
+        vk::PhysicalDevice m_PhysicalDevice;
+
     private:
         SnowWindow* m_Window;
     };
