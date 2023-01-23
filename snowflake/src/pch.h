@@ -8,6 +8,7 @@
 #include <string>
 #include <array>
 
+#include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
 
 #include <spdlog/spdlog.h>
