@@ -1,10 +1,11 @@
 #pragma once
-#include "core/Logger.h"
 #include "pch.h"
+#include "core/Logger.h"
+#include "VulkanQueueFamily.h"
 
 namespace
 {
-	bool checkDeviceExtensionSupport(const vk::PhysicalDevice& device, const std::vector<const char*>& extensionsToCheck)
+	inline bool checkDeviceExtensionSupport(const vk::PhysicalDevice& device, const std::vector<const char*>& extensionsToCheck)
 	{
 		std::unordered_set<std::string> requestedExtensions(extensionsToCheck.begin(), extensionsToCheck.end());
 
@@ -14,7 +15,7 @@ namespace
 		return requestedExtensions.empty();
 	}
 
-	bool isDeviceSuitable(const vk::PhysicalDevice& device)
+	inline bool isDeviceSuitable(const vk::PhysicalDevice& device)
 	{
 		std::vector<const char*> requestedExtensions = {
 			VK_KHR_SWAPCHAIN_EXTENSION_NAME
@@ -39,7 +40,7 @@ namespace
 	}
 
 #ifdef SNOW_DEBUG
-	void displayDeviceProperties(const vk::PhysicalDevice& device)
+	inline void displayDeviceProperties(const vk::PhysicalDevice& device)
 	{
 		vk::PhysicalDeviceProperties properties = device.getProperties();
 
@@ -81,7 +82,7 @@ namespace
 
 namespace snow::vulkan
 {
-	vk::PhysicalDevice selectPhysicalDevice(vk::Instance& instance)
+	inline vk::PhysicalDevice selectPhysicalDevice(const vk::Instance& instance)
 	{
 		std::vector<vk::PhysicalDevice> avaliableDevices = instance.enumeratePhysicalDevices();
 		vk::PhysicalDevice chosenDevice;
@@ -110,6 +111,51 @@ namespace snow::vulkan
 		}
 
 		SNOW_LOG_ERROR("Unable to find a suitable physical device.");
+		return nullptr;
+	}
+
+	inline vk::Device createLogicalDevice(const vk::PhysicalDevice& device)
+	{
+		QueueFamilyIndices indices = findFamilyQueues(device);
+		float priority = 1.f;
+
+		vk::DeviceQueueCreateInfo queueCreateInfo {
+			vk::DeviceQueueCreateFlags(),		// flags_
+			indices.graphicsFamily.value(),		// queueFamilyIndex_
+			1,									// queueCount_
+			&priority							// pQueuePriorities_
+		};
+
+		vk::PhysicalDeviceFeatures features { };
+
+		std::vector<const char*> enabledLayers;
+
+#ifdef SNOW_DEBUG
+		enabledLayers.push_back("VK_LAYER_KHRONOS_validation");
+#endif
+
+		vk::DeviceCreateInfo deviceCreateInfo {
+			vk::DeviceCreateFlags(),						// flags_
+			1,												// queueCreateInfoCount_
+			&queueCreateInfo,								// pQueueCreateInfos_
+			static_cast<uint32_t>(enabledLayers.size()),	// enabledLayerCount_
+			enabledLayers.data(),							// ppEnabledLayerNames_
+			0,												// enabledExtensionCount_
+			nullptr,										// ppEnabledExtensionNames_
+			&features										// pEnabledFeatures_
+		};
+
+		try
+		{
+			return device.createDevice(deviceCreateInfo);
+		}
+		catch (vk::SystemError error)
+		{
+			SNOW_LOG_CRITICAL("Failed to create a Vulkan logical device.");
+			SNOW_LOG_CRITICAL("{}", error.what());
+			SNOW_LOG_DEBUG("\n");
+		}
+
 		return nullptr;
 	}
 }

@@ -9,7 +9,7 @@ namespace snow
         SNOW_LOG_ERROR("GLFW Error [{}]: {}", errorCode, description);
     }
 
-    struct SNOW_API SnowWindow
+    class SnowWindow
     {
     private:
         struct SnowWindowDeleter

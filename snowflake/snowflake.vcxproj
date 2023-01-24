@@ -204,6 +204,7 @@
     <ClInclude Include="src\platform\vulkan\VulkanDevice.h" />
     <ClInclude Include="src\platform\vulkan\VulkanInstance.h" />
     <ClInclude Include="src\platform\vulkan\VulkanMessenger.h" />
+    <ClInclude Include="src\platform\vulkan\VulkanQueueFamily.h" />
     <ClInclude Include="src\Snowflake.h" />
   </ItemGroup>
   <ItemGroup>

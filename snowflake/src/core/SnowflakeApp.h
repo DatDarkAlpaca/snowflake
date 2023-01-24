@@ -23,6 +23,9 @@ namespace snow
         vk::DispatchLoaderDynamic m_Dispatcher;
 
         vk::PhysicalDevice m_PhysicalDevice;
+        vk::Device m_LogicalDevice;
+
+        vk::Queue m_GraphicsQueue = nullptr;
 
     private:
         SnowWindow* m_Window;

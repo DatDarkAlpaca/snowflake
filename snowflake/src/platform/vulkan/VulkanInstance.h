@@ -5,7 +5,7 @@
 namespace
 {
 	// Helpers:
-	inline bool areExtensionSupported(std::vector<const char*> extensions)
+	inline bool areExtensionSupported(const std::vector<const char*>& extensions)
 	{
 		std::vector<vk::ExtensionProperties> extensionsSupported = vk::enumerateInstanceExtensionProperties();
 
@@ -40,7 +40,7 @@ namespace
 		return sticky && supported;
 	}
 
-	inline bool areLayersSupported(std::vector<const char*> layers)
+	inline bool areLayersSupported(const std::vector<const char*>& layers)
 	{
 		std::vector<vk::LayerProperties> layersSupported = vk::enumerateInstanceLayerProperties();
 

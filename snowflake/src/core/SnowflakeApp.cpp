@@ -44,11 +44,16 @@ namespace snow
 #endif
 
 		m_PhysicalDevice = vulkan::selectPhysicalDevice(m_VulkanInstance);
+		m_LogicalDevice = vulkan::createLogicalDevice(m_PhysicalDevice);
+
+		m_GraphicsQueue = vulkan::getQueue(m_PhysicalDevice, m_LogicalDevice);
 	}
 
 	SnowflakeApp::~SnowflakeApp()
 	{
 		delete m_Window;
+
+		m_LogicalDevice.destroy();
 
 		glfwTerminate();
 	}

@@ -45,6 +45,9 @@
     <ClInclude Include="src\platform\vulkan\VulkanDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\platform\vulkan\VulkanQueueFamily.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore">
