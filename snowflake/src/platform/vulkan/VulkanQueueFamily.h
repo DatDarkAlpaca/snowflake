@@ -19,7 +19,7 @@ namespace
 
 namespace snow::vulkan
 {
-	QueueFamilyIndices findFamilyQueues(const vk::PhysicalDevice& device)
+	QueueFamilyIndices findFamilyQueues(const vk::PhysicalDevice& device, const vk::SurfaceKHR& surface)
 	{
 		QueueFamilyIndices indices;
 
@@ -40,9 +40,14 @@ namespace snow::vulkan
 		{
 			if (queueFamilies[i].queueFlags & vk::QueueFlagBits::eGraphics)
 			{
+				SNOW_LOG_DEBUG("The queue #{} was determined to be suitable for graphics.", i);
 				indices.graphicsFamily = i;
+			}
+
+			if (device.getSurfaceSupportKHR(i, surface))
+			{
+				SNOW_LOG_DEBUG("The queue #{} was determined to be suitable for presentation.", i);
 				indices.presentFamily = i;
-				SNOW_LOG_DEBUG("The queue #{} was determined to be suitable for graphics and presentation.", i);
 			}
 
 			if (indices.isValid())
@@ -52,10 +57,13 @@ namespace snow::vulkan
 		return indices;
 	}
 
-	vk::Queue getQueue(const vk::PhysicalDevice& physicalDevice, const vk::Device& logicalDevice)
+	std::array<vk::Queue, 2> getQueue(const vk::PhysicalDevice& physicalDevice, const vk::Device& logicalDevice, const vk::SurfaceKHR& surface)
 	{
-		QueueFamilyIndices indices = findFamilyQueues(physicalDevice);
+		QueueFamilyIndices indices = findFamilyQueues(physicalDevice, surface);
 
-		return logicalDevice.getQueue(indices.graphicsFamily.value(), 0);
+		return {
+			logicalDevice.getQueue(indices.graphicsFamily.value(), 0),
+			logicalDevice.getQueue(indices.presentFamily.value(), 0)
+		};
 	}
 }

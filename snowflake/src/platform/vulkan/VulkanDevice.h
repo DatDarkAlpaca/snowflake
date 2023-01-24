@@ -114,16 +114,26 @@ namespace snow::vulkan
 		return nullptr;
 	}
 
-	inline vk::Device createLogicalDevice(const vk::PhysicalDevice& device)
+	inline vk::Device createLogicalDevice(const vk::PhysicalDevice& device, const vk::SurfaceKHR& surface)
 	{
-		QueueFamilyIndices indices = findFamilyQueues(device);
-		float priority = 1.f;
+		QueueFamilyIndices indices = findFamilyQueues(device, surface);
 
-		vk::DeviceQueueCreateInfo queueCreateInfo {
-			vk::DeviceQueueCreateFlags(),		// flags_
-			indices.graphicsFamily.value(),		// queueFamilyIndex_
-			1,									// queueCount_
-			&priority							// pQueuePriorities_
+		std::vector<uint32_t> uniqueIndices;
+		uniqueIndices.push_back(indices.graphicsFamily.value());
+
+		if (indices.graphicsFamily.value() != indices.presentFamily.value())
+			uniqueIndices.push_back(indices.presentFamily.value());
+
+		float priority = 1.f;
+		std::vector<vk::DeviceQueueCreateInfo> queueCreateInfo;
+		for(const auto& familyIndex : uniqueIndices)
+		{
+			queueCreateInfo.emplace_back(
+				vk::DeviceQueueCreateFlags(),		// flags_
+				indices.graphicsFamily.value(),		// queueFamilyIndex_
+				1,									// queueCount_
+				&priority							// pQueuePriorities_
+			);
 		};
 
 		vk::PhysicalDeviceFeatures features { };
@@ -136,8 +146,8 @@ namespace snow::vulkan
 
 		vk::DeviceCreateInfo deviceCreateInfo {
 			vk::DeviceCreateFlags(),						// flags_
-			1,												// queueCreateInfoCount_
-			&queueCreateInfo,								// pQueueCreateInfos_
+			static_cast<uint32_t>(queueCreateInfo.size()),	// queueCreateInfoCount_
+			queueCreateInfo.data(),							// pQueueCreateInfos_
 			static_cast<uint32_t>(enabledLayers.size()),	// enabledLayerCount_
 			enabledLayers.data(),							// ppEnabledLayerNames_
 			0,												// enabledExtensionCount_
